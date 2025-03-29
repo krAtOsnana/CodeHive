@@ -2,9 +2,18 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ClerkProvider, SignIn, SignUp } from "@clerk/nextjs";
+import {
+  ClerkProvider,
+  RedirectToSignIn,
+  SignedIn,
+  SignedOut,
+  SignIn,
+  SignUp
+} from "@clerk/nextjs";
 import { LogIn } from "lucide-react";
 import ConvexClerkProvider from "@/components/providers/ConvexClerkProvider";
+import Navbar from "@/components/Navbar";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,9 +48,18 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <SignedIn>
+              <div className="min-h-screen">
+                <Navbar />
+                <main className="px-4 sm:px-6 lg:px-8">{children}</main>
+              </div>
+            </SignedIn>
 
-            {children}
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
           </ThemeProvider>
+          <Toaster />
         </body>
       </html>
     </ConvexClerkProvider>
